@@ -50,22 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCiBW1-Qh1cPObGVlJSRX9YQzaGVlc1ZMc',
-    appId: '1:1058359163576:android:220a3835f3beb8da5c924d',
-    messagingSenderId: '1058359163576',
-    projectId: 'flutter-starter-template-99523',
-    storageBucket: 'flutter-starter-template-99523.appspot.com',
+    apiKey: 'AIzaSyDlDDqDnXg5cprjgrAd_3JUwh10BB5svF4',
+    appId: '1:164299697385:android:f24e79668427d1b518d478',
+    messagingSenderId: '164299697385',
+    projectId: 'starter-template-itheamc',
+    storageBucket: 'starter-template-itheamc.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDEMvd9oGSOriFRWRj99wLM0F_ll0vZH7A',
-    appId: '1:1058359163576:ios:1bc5a652eac421d25c924d',
-    messagingSenderId: '1058359163576',
-    projectId: 'flutter-starter-template-99523',
-    storageBucket: 'flutter-starter-template-99523.appspot.com',
-    androidClientId: '1058359163576-evdrhtgpq5mnqn39jlqcbsol5p17a6mt.apps.googleusercontent.com',
-    iosClientId: '1058359163576-769mjlu5k0p76h95i16kvi576brmbs4l.apps.googleusercontent.com',
-    iosBundleId: 'np.com.naxa.startertemplate',
+    apiKey: 'AIzaSyCcKOYD-eaBWwblIOqgh8ky9_JYfa9t2O0',
+    appId: '1:164299697385:ios:11c6f6437d5267fb18d478',
+    messagingSenderId: '164299697385',
+    projectId: 'starter-template-itheamc',
+    storageBucket: 'starter-template-itheamc.firebasestorage.app',
+    iosBundleId: 'com.itheamc.starterTemplate',
   );
 
 }

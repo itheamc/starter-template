@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "164299697385",
+    "project_id": "starter-template-itheamc",
+    "storage_bucket": "starter-template-itheamc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164299697385:android:f24e79668427d1b518d478",
+        "android_client_info": {
+          "package_name": "com.itheamc.starter_template"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164299697385-3paekbl4mmrpsa34m8ho1ibs5ef7ni37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlDDqDnXg5cprjgrAd_3JUwh10BB5svF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164299697385-3paekbl4mmrpsa34m8ho1ibs5ef7ni37.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "164299697385-gbfgn3mef00h6qhcggtq3n9rkv6vslbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itheamc.starterTemplate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
