@@ -25,7 +25,7 @@ Future<void> setupFlutterLocalNotifications() async {
 
   /// Creating the Android Notification Channel
   channel = const AndroidNotificationChannel(
-    'naxa_flutter_starter_template_default_notification_id',
+    'starter-template-default-channel',
     'Default Notification Channel',
     description: 'This channel is used for default notifications',
     importance: Importance.max,

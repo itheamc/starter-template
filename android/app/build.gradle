@@ -31,6 +31,7 @@ android {
             dimension "flavor"
             resValue "string", "app_name", "Starter Template"
         }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
