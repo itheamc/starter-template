@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:starter_template/core/services/location/location_coordinate.dart';
+import 'location_coordinate.dart';
 import 'location_service.dart';
 import 'location_service_provider.dart';
 import 'package:location/location.dart';
@@ -65,7 +65,13 @@ class CurrentLocationStateNotifier extends StateNotifier<LocationCoordinate?> {
   ///
   LocationCoordinate? _fromLocationData(LocationData location) {
     if (location.latitude != null && location.longitude != null) {
-      return LocationCoordinate(location.latitude!, location.longitude!);
+      return LocationCoordinate(
+        location.latitude!,
+        location.longitude!,
+        accuracy: location.accuracy,
+        altitude: location.altitude,
+        speed: location.speed,
+      );
     }
 
     return null;
