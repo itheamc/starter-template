@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 
@@ -39,6 +41,22 @@ class ConnectivityService {
       if (kDebugMode) {
         print(e.toString());
       }
+      return false;
+    }
+  }
+
+  /// Method to check if connected network has really internet connection or not
+  ///
+  Future<bool> hasActiveInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+      return false;
+    } on SocketException catch (_) {
+      return false;
+    } catch (e) {
       return false;
     }
   }

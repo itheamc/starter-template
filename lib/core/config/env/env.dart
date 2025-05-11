@@ -57,7 +57,7 @@ class Env {
     }
   }
 
-  /// Function to parse .env file and return a Map<String, String>
+  /// Function to parse .env file and return a dictionary
   ///
   Future<Map<String, String>> _parse(String fileContent) async {
     // Split the file content into lines

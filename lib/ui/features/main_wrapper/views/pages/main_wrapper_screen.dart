@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:starter_template/core/services/location/location_service.dart';
 
 import '../../../../../core/services/firebase/firebase_notification/fcm_notification_handler.dart';
+import '../../../../../core/services/location/location_service_provider.dart';
 import '../../../../../ui/features/notifications/provider/fcm_device_add_or_update_request_state_provider.dart';
 import '../../../../../core/services/connectivity/connectivity_status_provider.dart';
 import '../../../../../core/services/location/current_location_provider.dart';
@@ -85,7 +85,7 @@ class _MainWrapperScreenState extends ConsumerState<MainWrapperScreen> {
           LocationPermissionRequestBottomSheet.show(
             context,
             onAllowClick: () {
-              LocationService.instance.checkAndRequestLocationPermission(
+              ref.read(locationServiceProvider).checkAndRequestLocationPermission(
                 retries: 2,
                 onCompleted: (granted) {
                   // Invoking Completion

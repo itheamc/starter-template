@@ -8,17 +8,21 @@ class DevelopmentConfiguration extends Configuration {
   ///
   DevelopmentConfiguration._internal()
       : super(
-          maxCacheAge: const Duration(days: 45),
-          dioCacheForceRefreshKey: "naxa_app_dio_cache_force_refresh_key_dev",
+          maxCacheAge: const Duration(minutes: 30),
+          dioCacheForceRefreshKey: "dio_cache_force_refresh_key_dev",
           hiveBoxName: Env.instance.valueOf(EnvKeys.devStorageBoxName) ?? '',
           baseUrl: Env.instance.valueOf(EnvKeys.devBaseUrl) ?? '',
-          privacyPolicyUrl: Env.instance.valueOf(EnvKeys.devPrivacyPolicyUrl) ?? '',
+          privacyPolicyUrl:
+              Env.instance.valueOf(EnvKeys.devPrivacyPolicyUrl) ?? '',
         );
 
   /// Singleton instance of this class
   ///
   static final DevelopmentConfiguration instance =
       DevelopmentConfiguration._internal();
+
+  @override
+  String get apiBaseUrl => apiBaseUrlV1;
 
   @override
   Flavor get flavor => Flavor.dev;

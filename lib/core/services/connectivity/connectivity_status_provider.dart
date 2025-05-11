@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,11 +23,23 @@ class ConnectivityStatusStateNotifier extends StateNotifier<bool> {
 
     _service.hasActiveConnection().then(
       (connected) async {
-        final hasInternet = connected ? await _hasActiveInternet() : false;
+        final hasInternet =
+            connected ? await _service.hasActiveInternet() : false;
         state = connected && hasInternet;
       },
     );
+
+    _timer = Timer.periodic(
+      const Duration(milliseconds: 5000),
+      (timer) async {
+        await refresh();
+      },
+    );
   }
+
+  /// Active Internet Connection Checker Timer
+  ///
+  Timer? _timer;
 
   /// ConnectivityService
   ///
@@ -41,10 +52,11 @@ class ConnectivityStatusStateNotifier extends StateNotifier<bool> {
   /// Function to update internet status
   ///
   Future<void> _updateInternetStatus(List<ConnectivityResult> results) async {
-    if (state != _getStatus(results)) {
-      final isConnected = _getStatus(results);
-      final hasInternet = isConnected ? await _hasActiveInternet() : false;
-      state = isConnected && hasInternet;
+    final connected = _getStatus(results);
+    if (state != connected) {
+      final hasInternet =
+          connected ? await _service.hasActiveInternet() : false;
+      state = connected && hasInternet;
     }
   }
 
@@ -57,20 +69,12 @@ class ConnectivityStatusStateNotifier extends StateNotifier<bool> {
         results.contains(ConnectivityResult.bluetooth);
   }
 
-  /// Method to check if connected network has really internet connection or not
-  ///
-  Future<bool> _hasActiveInternet() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-      return false;
-    } on SocketException catch (_) {
-      return false;
-    } catch (e) {
-      return false;
-    }
+  Future<bool> refresh() async {
+    final connected = await _service.hasActiveConnection();
+    final hasInternet = connected ? await _service.hasActiveInternet() : false;
+    final updated = connected && hasInternet;
+    if (mounted) state = updated;
+    return updated;
   }
 
   /// Cancelling the subscription on dispose
@@ -79,5 +83,6 @@ class ConnectivityStatusStateNotifier extends StateNotifier<bool> {
   void dispose() {
     super.dispose();
     _connectivitySubscription.cancel();
+    _timer?.cancel();
   }
 }

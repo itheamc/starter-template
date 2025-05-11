@@ -7,7 +7,6 @@ final activeOnboardingItemProvider =
   (ref) {
     return ActiveOnboardingItemNotifier(
       OnboardingItem.item1,
-      ref,
     );
   },
 );
@@ -17,13 +16,7 @@ final activeOnboardingItemProvider =
 class ActiveOnboardingItemNotifier extends StateNotifier<OnboardingItem> {
   ActiveOnboardingItemNotifier(
     super.state,
-    this._ref,
   );
-
-  /// Ref
-  ///
-  final StateNotifierProviderRef<ActiveOnboardingItemNotifier, OnboardingItem>
-      _ref;
 
   /// Method to get the user profile
   ///

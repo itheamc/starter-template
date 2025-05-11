@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,12 +40,24 @@ class GoogleLoginRequestStateNotifier extends StateNotifier<LoginRequestState> {
   ///
   final Ref<LoginRequestState> _ref;
 
+  /// Completer for confirming request is not send multiple times
+  ///
+  Completer<void>? _requestCompleter;
+
   /// Method to handle login with google
   ///
   Future<void> login({
     CancelToken? cancelToken,
     void Function(bool success)? onCompleted,
   }) async {
+    if (_requestCompleter != null && !_requestCompleter!.isCompleted) {
+      onCompleted?.call(false);
+      return;
+    }
+
+    // Initialize the completer
+    _requestCompleter?.complete();
+
     // Update state
     if (mounted) {
       state = LoginRequestState(
@@ -70,6 +84,9 @@ class GoogleLoginRequestStateNotifier extends StateNotifier<LoginRequestState> {
 
         // Showing toast message in case of error
         if (l.message != null) Fluttertoast.showToast(msg: l.message!);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
       (r) async {
         if (mounted) {
@@ -85,6 +102,9 @@ class GoogleLoginRequestStateNotifier extends StateNotifier<LoginRequestState> {
 
         // Trigger on completed callback
         onCompleted?.call(true);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
     );
   }

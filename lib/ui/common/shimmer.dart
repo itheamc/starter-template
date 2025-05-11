@@ -49,7 +49,7 @@ class Shimmer extends StatefulWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: color ?? context.theme.dividerColor.withOpacity(opacity),
+        color: color ?? context.theme.dividerColor.withValues(alpha: opacity),
         borderRadius: BorderRadius.circular(radius ?? 20.0),
       ),
       child: child,
@@ -76,7 +76,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 
   LinearGradient get gradient => LinearGradient(
         colors: widget.linearGradient.colors
-            .map((e) => e.withOpacity(widget.opacity))
+            .map((e) => e.withValues(alpha: widget.opacity))
             .toList(),
         stops: widget.linearGradient.stops,
         begin: widget.linearGradient.begin,

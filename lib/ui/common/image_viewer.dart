@@ -1,35 +1,76 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../utils/extension_functions.dart';
-
-/// Image Type to decide How to load the image
-///
-enum ImageType { network, assets }
+import 'common_image.dart';
 
 /// Image Viewer
 ///
 class ImageViewer extends StatefulWidget {
-  final String imagePathOrUrl;
-  final ImageType imageType;
-  final Color? background;
-  final String? title;
-  final void Function(bool status)? onZoomStatusChanged;
-  final Widget? errorWidget;
-  final double maxScale;
-
   const ImageViewer({
     super.key,
     required this.imagePathOrUrl,
-    required this.imageType,
     this.background,
     this.title,
     this.onZoomStatusChanged,
     this.errorWidget,
     this.maxScale = 3.5,
   });
+
+  final String imagePathOrUrl;
+  final Color? background;
+  final String? title;
+  final void Function(bool status)? onZoomStatusChanged;
+  final Widget? errorWidget;
+  final double maxScale;
+
+  /// Method to show bottom sheet
+  static Future<T?> show<T>(
+    BuildContext context, {
+    required String imagePathOrUrl,
+    Color? background,
+    String? title,
+    void Function(bool status)? onZoomStatusChanged,
+    Widget? errorWidget,
+    double maxScale = 3.5,
+  }) async {
+    // return showDialog<T>(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   useSafeArea: false,
+    //   useRootNavigator: true,
+    //   barrierColor: context.theme.dividerColor.withValues(alpha: 0.10),
+    //   builder: (_) {
+    //     return ImageViewer(
+    //       imagePathOrUrl: imagePathOrUrl,
+    //       background: background,
+    //       title: title,
+    //       onZoomStatusChanged: onZoomStatusChanged,
+    //       errorWidget: errorWidget,
+    //       maxScale: maxScale,
+    //     );
+    //   },
+    // );
+
+    // Used Navigator.push instead of showDialog to implement the hero animation
+    // on the dialog
+    return Navigator.push<T>(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return ImageViewer(
+            imagePathOrUrl: imagePathOrUrl,
+            background: background,
+            title: title,
+            onZoomStatusChanged: onZoomStatusChanged,
+            errorWidget: errorWidget,
+            maxScale: maxScale,
+          );
+        },
+      ),
+    );
+  }
 
   @override
   State<ImageViewer> createState() => _ImageViewerState();
@@ -43,6 +84,7 @@ class _ImageViewerState extends State<ImageViewer>
   late Animation<Matrix4> _matrixAnimation;
 
   /// Initializing the _transformationController and _animationController
+  ///
   @override
   void initState() {
     super.initState();
@@ -56,6 +98,7 @@ class _ImageViewerState extends State<ImageViewer>
   }
 
   /// Disposing the _transformationController and _animationController
+  ///
   @override
   void dispose() {
     _animationController.removeListener(_animListener);
@@ -66,6 +109,7 @@ class _ImageViewerState extends State<ImageViewer>
   }
 
   /// Transformation Status listener
+  ///
   void _transformationListener() {
     widget.onZoomStatusChanged?.call(
         _transformationController.value != Matrix4.identity() ||
@@ -73,16 +117,19 @@ class _ImageViewerState extends State<ImageViewer>
   }
 
   /// Function to listen animation
+  ///
   void _animListener() {
     _transformationController.value = _matrixAnimation.value;
   }
 
   /// Function to handle double tap
+  ///
   void _onDoubleTapDown(TapDownDetails details) {
     _doubleTapDetails = details;
   }
 
   /// Function to handle double tap
+  ///
   void _onDoubleTap() {
     Matrix4 endMatrix;
     Offset position = _doubleTapDetails.localPosition;
@@ -118,7 +165,7 @@ class _ImageViewerState extends State<ImageViewer>
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: widget.background ?? Colors.white,
+        backgroundColor: widget.background ?? context.theme.colorScheme.surface,
         extendBodyBehindAppBar: true,
         extendBody: true,
         appBar: widget.title != null && widget.title!.trim().isNotEmpty
@@ -149,6 +196,7 @@ class _ImageViewerState extends State<ImageViewer>
   }
 
   /// Ui for body
+  ///
   Widget _ui4Body() {
     return InteractiveViewer(
       transformationController: _transformationController,
@@ -159,49 +207,11 @@ class _ImageViewerState extends State<ImageViewer>
         onDoubleTap: _onDoubleTap,
         child: Hero(
           tag: widget.imagePathOrUrl.hashCode,
-          child: widget.imageType == ImageType.assets
-              ? Image.asset(
-                  widget.imagePathOrUrl,
-                  height: context.mediaQuery.size.height,
-                  width: context.mediaQuery.size.width,
-                  errorBuilder: (_, __, e) => SizedBox(
-                    height: context.mediaQuery.size.height,
-                    width: context.mediaQuery.size.width,
-                    child: widget.errorWidget ??
-                        Center(
-                          child: Icon(
-                            Icons.image_not_supported_outlined,
-                            color: context.theme.dividerColor,
-                          ),
-                        ),
-                  ),
-                )
-              : CachedNetworkImage(
-                  imageUrl: widget.imagePathOrUrl,
-                  height: context.mediaQuery.size.height,
-                  width: context.mediaQuery.size.width,
-                  fit: BoxFit.contain,
-                  progressIndicatorBuilder: (ctx, url, progress) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: progress.progress,
-                      ),
-                    );
-                  },
-                  errorWidget: (ctx, url, err) {
-                    return SizedBox(
-                      height: context.mediaQuery.size.height,
-                      width: context.mediaQuery.size.width,
-                      child: widget.errorWidget ??
-                          const Center(
-                            child: Icon(
-                              Icons.image_not_supported_outlined,
-                              color: Colors.white,
-                            ),
-                          ),
-                    );
-                  },
-                ),
+          child: CommonImage(
+            assetsOrUrlOrPath: widget.imagePathOrUrl,
+            height: context.mediaQuery.size.height,
+            width: context.mediaQuery.size.width,
+          ),
         ),
       ),
     );

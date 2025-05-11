@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../typedef/user_profile_response_or_exception.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
+import '../models/user_profile.dart';
 
 abstract class UserProfileRepository {
   ///  Base endpoint path for profile
@@ -13,7 +14,7 @@ abstract class UserProfileRepository {
 
   /// Method to fetch user profile
   ///
-  Future<EitherUserProfileResponseOrException> fetchProfile({
+  Future<EitherResponseOrException<UserProfile>> fetchProfile({
     required int? profileId,
     bool forceRefresh = true,
     CancelToken? cancelToken,
@@ -21,7 +22,7 @@ abstract class UserProfileRepository {
 
   /// Method to handle profile update
   ///
-  Future<EitherUserProfileResponseOrException> updateProfile({
+  Future<EitherResponseOrException<UserProfile>> updateProfile({
     required int profileId,
     required Map<String, dynamic> payloads,
     Map<String, dynamic>? medias,

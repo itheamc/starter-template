@@ -1,9 +1,14 @@
 import '../../../../utils/logger.dart';
 import '../../core/base_table.dart';
+import '../../core/base_database_provider.dart';
+import '../../providers/users_database_provider.dart';
 import 'user_schema.dart';
 import 'package:sqflite/sqflite.dart';
 
 class UsersTable extends BaseTable<UserSchema> {
+  @override
+  BaseDatabaseProvider get provider => UsersDatabaseProvider.instance;
+
   @override
   String get tableName => "tbl_users";
 

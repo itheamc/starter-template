@@ -70,7 +70,7 @@ class PieProgressPainter extends CustomPainter {
 
     // Background painter
     Paint bgPaint = Paint()
-      ..color = progressColor.withOpacity(0.2)
+      ..color = progressColor.withValues(alpha: 0.2)
       ..style = PaintingStyle.fill;
 
     // Progress Painter
@@ -81,8 +81,8 @@ class PieProgressPainter extends CustomPainter {
     // Progress Painter
     Paint secondaryProgressPaint = Paint()
       ..color = secondaryProgressAbovePrimary
-          ? secondaryProgressColor.withOpacity(0.15)
-          : secondaryProgressColor.withOpacity(0.35)
+          ? secondaryProgressColor.withValues(alpha: 0.15)
+          : secondaryProgressColor.withValues(alpha: 0.35)
       ..style = PaintingStyle.fill;
 
     if (background != null) {

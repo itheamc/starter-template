@@ -2,7 +2,7 @@ import 'dart:async';
 import 'sql_query_builder.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../utils/logger.dart';
-import '../database_provider.dart';
+import 'base_database_provider.dart';
 import 'base_schema.dart';
 
 /// An abstract class representing a table for a generic entity type [T].
@@ -14,6 +14,11 @@ import 'base_schema.dart';
 ///
 /// The type parameter [T] represents the entity class.
 abstract class BaseTable<T extends BaseSchema> {
+  /// The database provider.
+  ///
+  /// This provider is responsible for connecting to the database.
+  BaseDatabaseProvider get provider;
+
   /// The name of the table.
   ///
   /// Each derived class should specify the table name for the entity.
@@ -52,7 +57,7 @@ abstract class BaseTable<T extends BaseSchema> {
   /// Returns inserted [T] if the insert was successful, otherwise `null`.
   Future<T?> insert(T schema) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
       final id = await database?.insert(
         tableName,
         schema.toJson(),
@@ -73,7 +78,7 @@ abstract class BaseTable<T extends BaseSchema> {
   /// Returns updated [T] if the update was successful, otherwise `null`.
   Future<T?> update(int id, T schema) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final count = await database?.update(
         tableName,
@@ -104,7 +109,7 @@ abstract class BaseTable<T extends BaseSchema> {
   /// Returns `true` if the deletion was successful, otherwise `false`.
   Future<bool> delete(int id) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final count = await database?.delete(
         tableName,
@@ -127,7 +132,7 @@ abstract class BaseTable<T extends BaseSchema> {
   /// Returns an instance of [T] if the record was found, otherwise `null`.
   Future<T?> get(int id) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final query = await database?.query(
         tableName,
@@ -155,7 +160,7 @@ abstract class BaseTable<T extends BaseSchema> {
     String? query,
   }) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final whereClause = query != null
           ? query.isNotEmpty
@@ -214,7 +219,7 @@ abstract class BaseTable<T extends BaseSchema> {
     String? orderBy,
   }) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final res = await database?.query(tableName,
           columns: columns,
@@ -254,7 +259,7 @@ abstract class BaseTable<T extends BaseSchema> {
     required SqlQueryBuilder builder,
   }) async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       // If builder contains different table name or null update this with current
       // table name
@@ -278,7 +283,7 @@ abstract class BaseTable<T extends BaseSchema> {
   /// Returns the total count of records.
   Future<int> count() async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
 
       final q = 'SELECT COUNT(*) FROM $tableName';
 
@@ -299,7 +304,7 @@ abstract class BaseTable<T extends BaseSchema> {
   ///
   Future<void> deleteTable() async {
     try {
-      final database = await DatabaseProvider.instance.database;
+      final database = await provider.database;
       database?.execute("DROP TABLE IF EXISTS $tableName");
     } catch (e) {
       Logger.logError(e.toString());

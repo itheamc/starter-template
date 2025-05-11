@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:starter_template/core/styles/app_theme.dart';
 import '../../utils/extension_functions.dart';
-import '../../ui/common/app_button.dart';
+import 'app_button.dart';
 
 class LocationPermissionRequestBottomSheet extends StatefulWidget {
   final VoidCallback? onAllowClick;
@@ -47,7 +48,12 @@ class _LocationPermissionRequestBottomSheetState
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.only(
+        left: 24.0,
+        right: 24.0,
+        top: 24.0,
+        bottom: context.padding.bottom + 16.0,
+      ),
       child: Material(
         color: context.theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(24.0),
@@ -60,16 +66,23 @@ class _LocationPermissionRequestBottomSheetState
               alignment: Alignment.topRight,
               child: Padding(
                 padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text(
-                        context.appLocalization.location_service_dialog_title,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                    // Icon(Icons.error_outline_outlined, color: NaxaAppColors.red,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            context
+                                .appLocalization.location_service_dialog_title,
+                            style: context.textTheme.semibold16?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -79,14 +92,22 @@ class _LocationPermissionRequestBottomSheetState
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 context.appLocalization.location_service_dialog_body,
-                style: context.textTheme.bodyMedium?.copyWith(
+                style: context.textTheme.regular14?.copyWith(
                   height: 1.75,
                 ),
+                textScaler: TextScaler.linear(0.95),
               ),
             ),
             AppButton(
               text: context.appLocalization.allow,
-              margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+              margin: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                top: 16.0,
+                bottom: 8.0,
+              ),
+              padding: EdgeInsets.zero,
+              height: 46.0,
               onPressed: () {
                 _isAlreadyDismissed = true;
 
@@ -98,8 +119,14 @@ class _LocationPermissionRequestBottomSheetState
             ),
             AppButton(
               text: context.appLocalization.cancel,
-              margin: const EdgeInsets.all(16.0),
-              buttonType: NaxaAppButtonType.text,
+              margin: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: 16.0,
+              ),
+              buttonType: AppButtonType.text,
+              padding: EdgeInsets.zero,
+              height: 46.0,
               onPressed: () {
                 _isAlreadyDismissed = true;
 

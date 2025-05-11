@@ -226,7 +226,7 @@ class IosUpdater {
                           style: context.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color:
-                                context.theme.iconTheme.color?.withOpacity(0.7),
+                                context.theme.iconTheme.color?.withValues(alpha: 0.7),
                           ),
                           textScaler: const TextScaler.linear(0.9),
                         ),
@@ -292,7 +292,7 @@ class IosUpdater {
                                       context.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: context.textTheme.titleMedium?.color
-                                        ?.withOpacity(0.8),
+                                        ?.withValues(alpha: 0.8),
                                   ),
                                 ),
                                 Text.rich(
@@ -304,7 +304,7 @@ class IosUpdater {
                                             ?.copyWith(
                                           color: context
                                               .textTheme.labelLarge?.color
-                                              ?.withOpacity(0.7),
+                                              ?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                       TextSpan(
@@ -313,7 +313,7 @@ class IosUpdater {
                                             ?.copyWith(
                                           color: context
                                               .textTheme.labelLarge?.color
-                                              ?.withOpacity(0.7),
+                                              ?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                       TextSpan(
@@ -322,7 +322,7 @@ class IosUpdater {
                                             ?.copyWith(
                                           color: context
                                               .textTheme.labelLarge?.color
-                                              ?.withOpacity(0.7),
+                                              ?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                       TextSpan(
@@ -331,7 +331,7 @@ class IosUpdater {
                                             ?.copyWith(
                                           color: context
                                               .textTheme.labelLarge?.color
-                                              ?.withOpacity(0.7),
+                                              ?.withValues(alpha: 0.7),
                                         ),
                                       ),
                                     ],
@@ -401,7 +401,7 @@ class IosUpdater {
                                     vertical: 12.0,
                                   ),
                                   borderRadius: BorderRadius.circular(24.0),
-                                  buttonType: NaxaAppButtonType.outlined,
+                                  buttonType: AppButtonType.outlined,
                                   onPressed: context.pop,
                                   text: context.appLocalization.update_later,
                                   color: context.isDarkTheme
