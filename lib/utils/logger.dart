@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Logger {
   static void logSuccess(dynamic message) {
@@ -15,5 +15,9 @@ class Logger {
 
   static void logMessage(dynamic message) {
     debugPrint('➡️➡️➡️ ${message?.toString()} ⬅️⬅️⬅️');
+  }
+
+  static void logRaw(dynamic message) {
+    debugPrint(message is String ? message : '${message?.toString()}');
   }
 }

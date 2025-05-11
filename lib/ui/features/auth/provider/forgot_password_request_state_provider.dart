@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,10 @@ class ForgotPasswordRequestStateNotifier
   ///
   final AuthRepository _repository;
 
+  /// Completer for confirming request is not send multiple times
+  ///
+  Completer<void>? _requestCompleter;
+
   /// Method to handle forgot password
   ///
   Future<void> forgotPassword({
@@ -37,6 +43,14 @@ class ForgotPasswordRequestStateNotifier
     CancelToken? cancelToken,
     void Function(bool success)? onCompleted,
   }) async {
+    if (_requestCompleter != null && !_requestCompleter!.isCompleted) {
+      onCompleted?.call(false);
+      return;
+    }
+
+    // Initialize the completer
+    _requestCompleter?.complete();
+
     // Update state
     if (mounted) {
       state = ForgotPasswordRequestState(
@@ -65,6 +79,9 @@ class ForgotPasswordRequestStateNotifier
 
         // Showing toast message in case of error
         if (l.message != null) Fluttertoast.showToast(msg: l.message!);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
       (r) async {
         if (mounted) {
@@ -80,6 +97,9 @@ class ForgotPasswordRequestStateNotifier
 
         // Trigger on completed callback
         onCompleted?.call(true);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
     );
   }

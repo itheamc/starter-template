@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 
-import '../typedef/fcm_device_add_or_update_response_or_exception.dart';
-import '../typedef/fcm_device_check_response_or_exception.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
+import '../models/fcm_device_added_or_updated_response.dart';
+import '../models/fcm_device_check_response.dart';
 
 abstract class NotificationRepository {
   ///  Base endpoint path for checking if fcm device already added or not
@@ -18,7 +19,7 @@ abstract class NotificationRepository {
 
   /// Method to check if fcm device is already registered or not
   ///
-  Future<EitherFcmDeviceCheckResponseOrException>
+  Future<EitherResponseOrException<FcmDeviceCheckResponse>>
       checkIfDeviceAlreadyRegistered({
     required int? userId,
     bool forceRefresh = true,
@@ -27,7 +28,7 @@ abstract class NotificationRepository {
 
   /// Method to register or update fcm device
   ///
-  Future<EitherFcmDeviceAddedOrUpdatedResponseOrException>
+  Future<EitherResponseOrException<FcmDeviceAddedOrUpdatedResponse>>
       registerOrUpdateFcmDevice({
     required Map<String, dynamic> payloads,
     int? deviceId, // Just for update

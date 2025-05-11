@@ -11,7 +11,7 @@ enum IconImageSource {
   network,
 }
 
-/// NaxaCircularIconButton
+/// CircularIconButton
 ///
 class CircularIconButton extends StatelessWidget {
   final String urlOrName;
@@ -32,7 +32,7 @@ class CircularIconButton extends StatelessWidget {
     return InkWell(
       onTap: !loading ? onClick : null,
       borderRadius: BorderRadius.circular(50.0),
-      splashColor: context.theme.primaryColor.withOpacity(0.5),
+      splashColor: context.theme.primaryColor.withValues(alpha: 0.5),
       child: Container(
         width: 50.0,
         height: 50.0,

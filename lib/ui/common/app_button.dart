@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
   final double? height;
   final Color? color;
   final Color? onButtonColor;
-  final NaxaAppButtonType buttonType;
+  final AppButtonType buttonType;
   final bool loading;
   final bool uppercase;
   final bool showAlsoLoadingIndicator;
@@ -33,7 +33,7 @@ class AppButton extends StatelessWidget {
     this.borderRadius,
     this.color,
     this.onButtonColor,
-    this.buttonType = NaxaAppButtonType.elevated,
+    this.buttonType = AppButtonType.elevated,
     this.loading = false,
     this.uppercase = true,
     this.showAlsoLoadingIndicator = false,
@@ -63,9 +63,9 @@ class AppButton extends StatelessWidget {
                 ),
             decoration: BoxDecoration(
               borderRadius: borderRadius ?? radius,
-              color: buttonType == NaxaAppButtonType.elevated ? _color : null,
-              border: buttonType == NaxaAppButtonType.outlined ||
-                      buttonType == NaxaAppButtonType.elevated
+              color: buttonType == AppButtonType.elevated ? _color : null,
+              border: buttonType == AppButtonType.outlined ||
+                      buttonType == AppButtonType.elevated
                   ? Border.all(
                       color: _color,
                       width: 1.0,
@@ -80,8 +80,8 @@ class AppButton extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Icon(
                       leading,
-                      color: buttonType == NaxaAppButtonType.outlined ||
-                              buttonType == NaxaAppButtonType.text
+                      color: buttonType == AppButtonType.outlined ||
+                              buttonType == AppButtonType.text
                           ? _color
                           : onButtonColor ?? AppColors.white,
                     ),
@@ -97,8 +97,8 @@ class AppButton extends StatelessWidget {
                               uppercase ? text.uppercase : text,
                               style: context.textTheme.labelMedium?.copyWith(
                                 color:
-                                    buttonType == NaxaAppButtonType.outlined ||
-                                            buttonType == NaxaAppButtonType.text
+                                    buttonType == AppButtonType.outlined ||
+                                            buttonType == AppButtonType.text
                                         ? _color
                                         : onButtonColor ?? AppColors.white,
                               ),
@@ -109,8 +109,8 @@ class AppButton extends StatelessWidget {
                         : Text(
                             uppercase ? text.uppercase : text,
                             style: context.textTheme.labelMedium?.copyWith(
-                              color: buttonType == NaxaAppButtonType.outlined ||
-                                      buttonType == NaxaAppButtonType.text
+                              color: buttonType == AppButtonType.outlined ||
+                                      buttonType == AppButtonType.text
                                   ? _color
                                   : onButtonColor ?? AppColors.white,
                             ),
@@ -124,8 +124,8 @@ class AppButton extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Icon(
                       trailing,
-                      color: buttonType == NaxaAppButtonType.outlined ||
-                              buttonType == NaxaAppButtonType.text
+                      color: buttonType == AppButtonType.outlined ||
+                              buttonType == AppButtonType.text
                           ? _color
                           : onButtonColor ?? AppColors.white,
                     ),
@@ -139,7 +139,7 @@ class AppButton extends StatelessWidget {
                       child: CircularProgressIndicator.adaptive(
                         valueColor: AlwaysStoppedAnimation<Color>(_color),
                         backgroundColor:
-                            buttonType == NaxaAppButtonType.elevated
+                            buttonType == AppButtonType.elevated
                                 ? onButtonColor ?? AppColors.white
                                 : null,
                         strokeWidth: 2.0,
@@ -156,7 +156,7 @@ class AppButton extends StatelessWidget {
 }
 
 /// Enum
-enum NaxaAppButtonType {
+enum AppButtonType {
   elevated,
   text,
   outlined,

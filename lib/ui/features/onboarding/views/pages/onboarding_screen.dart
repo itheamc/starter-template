@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../l10n/l10n.dart';
 import '../../../../../utils/extension_functions.dart';
 import '../../enums/onboarding_item.dart';
 import '../../providers/active_onboarding_item_provider.dart';

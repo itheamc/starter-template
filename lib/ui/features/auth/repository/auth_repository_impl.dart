@@ -5,21 +5,19 @@ import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../core/services/network/models/form_file.dart';
+import '../../../../core/services/network/models/multipart_form_data.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
 import '../../../../core/services/router/app_router.dart';
 import '../../../../utils/extension_functions.dart';
 import '../../../../utils/logger.dart';
 import '../../../../core/services/network/http_exception.dart';
 import '../../../../core/services/network/http_response_validator.dart';
 import '../../../../core/services/network/http_service.dart';
-import '../../../../core/services/network/models/file.dart';
-import '../../../../core/services/network/models/form_data.dart';
 import '../../../../core/config/api_endpoints.dart';
 import '../models/forget_password_response.dart';
 import '../models/login_response.dart';
 import '../models/register_response.dart';
-import '../typedef/either_forgot_password_response_or_exception.dart';
-import '../typedef/either_login_response_exception.dart';
-import '../typedef/either_register_response_or_exception.dart';
 import 'auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -57,15 +55,15 @@ class AuthRepositoryImpl extends AuthRepository {
   /// Method to login
   ///
   @override
-  Future<EitherLoginResponseOrException> login({
+  Future<EitherResponseOrException<LoginResponse>> login({
     required Map<String, dynamic> payloads,
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await httpService.post(
         path4Login,
-        BaseFormData(
-          formFields: payloads,
+        MultipartFormData(
+          fields: payloads,
         ),
         contentType: ContentType.json,
         cancelToken: cancelToken,
@@ -90,7 +88,7 @@ class AuthRepositoryImpl extends AuthRepository {
   /// Method to handle google login
   ///
   @override
-  Future<EitherLoginResponseOrException> googleLogin({
+  Future<EitherResponseOrException<LoginResponse>> googleLogin({
     List<String> scopes = const [],
     CancelToken? cancelToken,
   }) async {
@@ -124,8 +122,8 @@ class AuthRepositoryImpl extends AuthRepository {
 
       final response = await httpService.post(
         path4GoogleLogin,
-        BaseFormData(
-          formFields: {
+        MultipartFormData(
+          fields: {
             "access_token": accessToken,
           },
         ),
@@ -152,7 +150,7 @@ class AuthRepositoryImpl extends AuthRepository {
   /// Method to handle apple login
   ///
   @override
-  Future<EitherLoginResponseOrException> appleLogin({
+  Future<EitherResponseOrException<LoginResponse>> appleLogin({
     CancelToken? cancelToken,
   }) async {
     try {
@@ -179,8 +177,8 @@ class AuthRepositoryImpl extends AuthRepository {
 
       final response = await httpService.post(
         path4AppleLogin,
-        BaseFormData(
-          formFields: {
+        MultipartFormData(
+          fields: {
             "access_token": identityToken,
           },
         ),
@@ -207,7 +205,7 @@ class AuthRepositoryImpl extends AuthRepository {
   /// Method to handle register
   ///
   @override
-  Future<EitherRegisterResponseOrException> register({
+  Future<EitherResponseOrException<RegisterResponse>> register({
     required Map<String, dynamic> payloads,
     Map<String, dynamic>? medias,
     CancelToken? cancelToken,
@@ -215,12 +213,12 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       final response = await httpService.post(
         path4Register,
-        BaseFormData(
-          formFields: payloads,
+        MultipartFormData(
+          fields: payloads,
           files: medias?.keys
               .map(
-                (k) => FilesToBeUploaded(
-                  key: k,
+                (k) => FormFile(
+                  fieldName: k,
                   path: medias[k],
                 ),
               )
@@ -260,15 +258,15 @@ class AuthRepositoryImpl extends AuthRepository {
   /// Method to handle forgot password
   ///
   @override
-  Future<EitherForgotPasswordResponseOrException> forgetPassword({
+  Future<EitherResponseOrException<ForgotPasswordResponse>> forgetPassword({
     required Map<String, dynamic> payloads,
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await httpService.post(
         path4ForgetPassword,
-        BaseFormData(
-          formFields: payloads,
+        MultipartFormData(
+          fields: payloads,
         ),
         contentType: ContentType.json,
         cancelToken: cancelToken,

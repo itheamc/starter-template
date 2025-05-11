@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,6 +38,11 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
   ///
   final Ref<UserProfileState> _ref;
 
+  /// Completer for confirming request is not send multiple times
+  ///
+  Completer<void>? _profileRequestCompleter;
+  Completer<void>? _profileUpdateCompleter;
+
   /// Method to get the user profile
   ///
   Future<void> fetchProfile({
@@ -44,12 +51,21 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
     CancelToken? cancelToken,
     void Function(UserProfile?)? onCompleted,
   }) async {
+    if (_profileRequestCompleter != null &&
+        !_profileRequestCompleter!.isCompleted) {
+      onCompleted?.call(null);
+      return;
+    }
+
     profileId ??= _ref.refresh(loggedInUserProfileIdProvider);
 
     if (profileId == null) {
       onCompleted?.call(null);
       return;
     }
+
+    // Initialize completer
+    _profileRequestCompleter = Completer();
 
     // Update state
     if (mounted) {
@@ -77,6 +93,9 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
 
         // Trigger onCompleted callback
         onCompleted?.call(null);
+
+        // Complete the completer
+        _profileRequestCompleter?.complete();
       },
       (r) async {
         if (mounted) {
@@ -89,6 +108,9 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
 
         // Trigger onCompleted callback
         onCompleted?.call(r);
+
+        // Complete the completer
+        _profileRequestCompleter?.complete();
       },
     );
   }
@@ -103,6 +125,12 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
     CancelToken? cancelToken,
     void Function(UserProfile?)? onCompleted,
   }) async {
+    if (_profileUpdateCompleter != null &&
+        !_profileUpdateCompleter!.isCompleted) {
+      onCompleted?.call(null);
+      return;
+    }
+
     profileId ??= _ref.refresh(loggedInUserProfileIdProvider);
 
     //cached user state profile details to be shown in case of error
@@ -112,6 +140,9 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
       onCompleted?.call(null);
       return;
     }
+
+    // Initialize completer
+    _profileUpdateCompleter = Completer();
 
     // Update state
     if (mounted) {
@@ -140,6 +171,9 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
 
         // Trigger onCompleted callback
         onCompleted?.call(null);
+
+        // Complete the completer
+        _profileUpdateCompleter?.complete();
       },
       (r) async {
         if (mounted) {
@@ -152,6 +186,9 @@ class UserProfileStateNotifier extends StateNotifier<UserProfileState> {
 
         // Trigger onCompleted callback
         onCompleted?.call(r);
+
+        // Complete the completer
+        _profileUpdateCompleter?.complete();
       },
     );
   }

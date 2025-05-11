@@ -5,10 +5,10 @@ import '../../../../core/config/api_endpoints.dart';
 import '../../../../core/services/network/http_exception.dart';
 import '../../../../core/services/network/http_response_validator.dart';
 import '../../../../core/services/network/http_service.dart';
-import '../../../../core/services/network/models/file.dart';
-import '../../../../core/services/network/models/form_data.dart';
+import '../../../../core/services/network/models/form_file.dart';
+import '../../../../core/services/network/models/multipart_form_data.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
 import '../models/user_profile.dart';
-import '../typedef/user_profile_response_or_exception.dart';
 import 'user_profile_repository.dart';
 
 class UserProfileRepositoryImpl extends UserProfileRepository {
@@ -33,7 +33,7 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
   /// Method to fetch user profile
   ///
   @override
-  Future<EitherUserProfileResponseOrException> fetchProfile({
+  Future<EitherResponseOrException<UserProfile>> fetchProfile({
     required int? profileId,
     bool forceRefresh = true,
     CancelToken? cancelToken,
@@ -63,7 +63,7 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
   /// Method to handle profile update
   ///
   @override
-  Future<EitherUserProfileResponseOrException> updateProfile({
+  Future<EitherResponseOrException<UserProfile>> updateProfile({
     required int profileId,
     required Map<String, dynamic> payloads,
     Map<String, dynamic>? medias,
@@ -72,12 +72,12 @@ class UserProfileRepositoryImpl extends UserProfileRepository {
     try {
       final response = await httpService.patch(
         '$path4ProfileUpdate$profileId/',
-        BaseFormData(
-          formFields: payloads,
+        MultipartFormData(
+          fields: payloads,
           files: medias?.keys
               .map(
-                (k) => FilesToBeUploaded(
-                  key: k,
+                (k) => FormFile(
+                  fieldName: k,
                   path: medias[k],
                 ),
               )

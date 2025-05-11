@@ -36,6 +36,8 @@ abstract class Configuration {
 
   String get apiBaseUrlV3 => "$baseUrl$apiV3";
 
+  String get apiBaseUrl;
+
   /// Getter for flavor
   ///
   Flavor get flavor;

@@ -4,11 +4,10 @@ import '../../../../core/config/api_endpoints.dart';
 import '../../../../core/services/network/http_exception.dart';
 import '../../../../core/services/network/http_response_validator.dart';
 import '../../../../core/services/network/http_service.dart';
-import '../../../../core/services/network/models/form_data.dart';
+import '../../../../core/services/network/models/multipart_form_data.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
 import '../models/fcm_device_added_or_updated_response.dart';
 import '../models/fcm_device_check_response.dart';
-import '../typedef/fcm_device_add_or_update_response_or_exception.dart';
-import '../typedef/fcm_device_check_response_or_exception.dart';
 import 'notification_repository.dart';
 
 class NotificationRepositoryImpl extends NotificationRepository {
@@ -37,7 +36,7 @@ class NotificationRepositoryImpl extends NotificationRepository {
   /// Method to check if fcm device is already registered or not
   ///
   @override
-  Future<EitherFcmDeviceCheckResponseOrException>
+  Future<EitherResponseOrException<FcmDeviceCheckResponse>>
       checkIfDeviceAlreadyRegistered({
     required int? userId,
     bool forceRefresh = true,
@@ -67,7 +66,7 @@ class NotificationRepositoryImpl extends NotificationRepository {
   /// Method to register or update fcm device
   ///
   @override
-  Future<EitherFcmDeviceAddedOrUpdatedResponseOrException>
+  Future<EitherResponseOrException<FcmDeviceAddedOrUpdatedResponse>>
       registerOrUpdateFcmDevice({
     required Map<String, dynamic> payloads,
     int? deviceId, // Just for update
@@ -78,16 +77,16 @@ class NotificationRepositoryImpl extends NotificationRepository {
       final response = update
           ? await httpService.put(
               "$path4UpdateFcmDevice$deviceId/",
-              BaseFormData(
-                formFields: payloads,
+              MultipartFormData(
+                fields: payloads,
               ),
               contentType: ContentType.json,
               cancelToken: cancelToken,
             )
           : await httpService.post(
               path4registerFcmDevice,
-              BaseFormData(
-                formFields: payloads,
+              MultipartFormData(
+                fields: payloads,
               ),
               contentType: ContentType.json,
               cancelToken: cancelToken,

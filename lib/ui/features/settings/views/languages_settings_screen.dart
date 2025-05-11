@@ -46,7 +46,7 @@ class LanguagesSettingsScreen extends ConsumerWidget {
                   border: Border.all(
                     color: l.languageCode == locale.languageCode
                         ? context.theme.colorScheme.primary
-                        : context.theme.dividerColor.withOpacity(0.2),
+                        : context.theme.dividerColor.withValues(alpha: 0.2),
                   ),
                 ),
                 child: Row(

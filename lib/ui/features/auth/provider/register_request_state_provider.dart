@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,10 @@ class RegisterRequestStateNotifier extends StateNotifier<RegisterRequestState> {
   ///
   final AuthRepository _repository;
 
+  /// Completer for confirming request is not send multiple times
+  ///
+  Completer<void>? _requestCompleter;
+
   /// Method to handle register
   ///
   Future<void> register({
@@ -38,6 +44,14 @@ class RegisterRequestStateNotifier extends StateNotifier<RegisterRequestState> {
     CancelToken? cancelToken,
     void Function(RegisterResponse?)? onCompleted,
   }) async {
+    if (_requestCompleter != null && !_requestCompleter!.isCompleted) {
+      onCompleted?.call(null);
+      return;
+    }
+
+    // Initialize completer
+    _requestCompleter = Completer();
+
     // Update state
     if (mounted) {
       state = RegisterRequestState(
@@ -69,6 +83,9 @@ class RegisterRequestStateNotifier extends StateNotifier<RegisterRequestState> {
 
         // Showing toast message in case of error
         if (l.message != null) Fluttertoast.showToast(msg: l.message!);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
       (r) async {
         if (mounted) {
@@ -83,6 +100,9 @@ class RegisterRequestStateNotifier extends StateNotifier<RegisterRequestState> {
 
         // Trigger on completed callback
         onCompleted?.call(r);
+
+        // Complete the completer
+        _requestCompleter?.complete();
       },
     );
   }

@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../typedef/either_forgot_password_response_or_exception.dart';
-import '../typedef/either_login_response_exception.dart';
-import '../typedef/either_register_response_or_exception.dart';
+import '../../../../core/services/network/typedefs/response_or_exception.dart';
+import '../models/forget_password_response.dart';
+import '../models/login_response.dart';
+import '../models/register_response.dart';
 
 abstract class AuthRepository {
   ///  Base endpoint path for login
@@ -27,14 +28,14 @@ abstract class AuthRepository {
 
   /// Method to login
   ///
-  Future<EitherLoginResponseOrException> login({
+  Future<EitherResponseOrException<LoginResponse>> login({
     required Map<String, dynamic> payloads,
     CancelToken? cancelToken,
   });
 
   /// Method to handle register
   ///
-  Future<EitherRegisterResponseOrException> register({
+  Future<EitherResponseOrException<RegisterResponse>> register({
     required Map<String, dynamic> payloads,
     Map<String, dynamic>? medias,
     CancelToken? cancelToken,
@@ -42,21 +43,21 @@ abstract class AuthRepository {
 
   /// Method to handle forgot password
   ///
-  Future<EitherForgotPasswordResponseOrException> forgetPassword({
+  Future<EitherResponseOrException<ForgotPasswordResponse>> forgetPassword({
     required Map<String, dynamic> payloads,
     CancelToken? cancelToken,
   });
 
   /// Method to handle google login
   ///
-  Future<EitherLoginResponseOrException> googleLogin({
+  Future<EitherResponseOrException<LoginResponse>> googleLogin({
     List<String> scopes = const [],
     CancelToken? cancelToken,
   });
 
   /// Method to handle apple login
   ///
-  Future<EitherLoginResponseOrException> appleLogin({
+  Future<EitherResponseOrException<LoginResponse>> appleLogin({
     CancelToken? cancelToken,
   });
 }

@@ -49,10 +49,15 @@ class _ImagePickerSourceSelectionBottomSheetState
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 16.0,
+        bottom: context.padding.bottom + 16.0,
+      ),
       child: Material(
         color: context.theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(24.0),
+        borderRadius: BorderRadius.circular(12.0),
         clipBehavior: Clip.antiAlias,
         child: Padding(
           padding:
